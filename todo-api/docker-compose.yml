@@ -1,0 +1,33 @@
+version: '3.8'
+
+networks:
+  todo-network:
+    driver: bridge
+
+services:
+  todo-db:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=todo
+    networks:
+      - todo-network
+
+  todo-api:
+    build:
+      context: todo-api
+      dockerfile: Dockerfile.layered
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://todo-db:5432/todo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+    networks:
+      - todo-network
+    restart: always
+    depends_on:
+      - todo-db
