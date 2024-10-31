@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Todo } from "@/services/models";
 import { deleteTodo } from "@/services/api";
 import { toast } from "react-toastify";
+import router from "next/router";
 
 interface TodoActionsProps {
     todo: Todo;
@@ -14,13 +15,13 @@ const TodoActions: React.FC<TodoActionsProps> = ({ todo }) => {
     const handleDelete = async () => {
         const response = await deleteTodo(todo.id);
         setShowModal(false);
-        console.log(response)
-        if (!response?.errorMessage) {
-            // toast.error(response.errorMessage);
-            // return;
+        if (response && response?.errorMessage) {
+            toast.error(response.errorMessage);
+            return;
         }
 
         toast.success("Todo deleted successfully.");
+        router.push("/todos");
     };
 
     return (

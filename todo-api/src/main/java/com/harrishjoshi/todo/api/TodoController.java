@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/todo")
+@CrossOrigin
 public class TodoController {
 
     private final TodoService todoService;
@@ -34,8 +35,18 @@ public class TodoController {
         return todoService.createTodo(request);
     }
 
+    @GetMapping("/{id}")
+    public TodoDTO findById(@PathVariable Long id) throws TodoNotFoundException {
+        return todoService.findById(id);
+    }
+
     @PutMapping("/{id}")
     public TodoDTO updateTodo(@PathVariable Long id, @RequestBody @Valid UpdateTodoRequest request) throws TodoNotFoundException, TodoAlreadyExists {
         return todoService.updateTodo(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) throws TodoNotFoundException {
+        todoService.deleteById(id);
     }
 }
