@@ -4,6 +4,8 @@ import { TodosResponse } from '@/services/models';
 import { GetServerSideProps } from 'next';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SearchForm from '@/components/SearchForm';
+import Pagination from '@/components/Pagination';
 
 interface HomeProps {
     todos: TodosResponse;
@@ -14,8 +16,9 @@ export default function Home({ todos, query }: HomeProps) {
     return (
         <div>
             <ToastContainer />
-            {/* <SearchForm /> */}
+            <SearchForm />
             <Todos todos={todos} query={query} />
+            <Pagination todos={todos} />
         </div>
     );
 }
