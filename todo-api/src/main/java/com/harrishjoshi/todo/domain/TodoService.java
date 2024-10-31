@@ -53,9 +53,10 @@ public class TodoService {
         return todoMapper.toDTO(savedTodo);
     }
 
-    private static PageRequest getPageRequest(Integer page) {
-        var pageNumber = page < 1 ? 0 : page - 1;
-        return PageRequest.of(pageNumber, 10, Sort.Direction.DESC, "createdAt");
+    public TodoDTO findById(Long id) throws TodoNotFoundException {
+        return todoRepository.findById(id)
+                .map(todoMapper::toDTO)
+                .orElseThrow(() -> new TodoNotFoundException("Todo with id [" + id + "] not found."));
     }
 
     public TodoDTO updateTodo(Long id, UpdateTodoRequest request) throws TodoNotFoundException, TodoAlreadyExists {
@@ -75,5 +76,17 @@ public class TodoService {
         var updatedTodo = todoRepository.save(todo);
 
         return todoMapper.toDTO(updatedTodo);
+    }
+
+    public void deleteById(Long id) throws TodoNotFoundException {
+        var todo = todoRepository.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException("Todo with id [" + id + "] not found."));
+
+        todoRepository.delete(todo);
+    }
+
+    private static PageRequest getPageRequest(Integer page) {
+        var pageNumber = page < 1 ? 0 : page - 1;
+        return PageRequest.of(pageNumber, 10, Sort.Direction.DESC, "createdAt");
     }
 }

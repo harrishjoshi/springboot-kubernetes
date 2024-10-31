@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import { Todo } from "@/services/models";
 import { fetchTodoById, updateTodo } from "@/services/api";
 import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 
 interface UpdateTodoProps {
@@ -34,15 +35,15 @@ const UpdateTodo: React.FC<UpdateTodoProps> = ({ todo }) => {
 
         const payload = { title, description, status };
         const response = await updateTodo(todo.id, payload);
-        if (!response?.errorMessage) {
+        if (response?.errorMessage) {
             toast.error(response.errorMessage);
             return;
         }
 
-        console.log("Update todo Response: ", response)
-        setTitle("");
-        setDescription("");
         toast.success("Todo updated successfully.");
+        setTimeout(() => {
+            router.push("/todos");
+        }, 1500);  
     };
 
     return (

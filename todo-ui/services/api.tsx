@@ -24,7 +24,7 @@ export const saveTodo = async (todo: { title: string, description: string }) => 
         const response = await axios.post(`${getApiUrl()}`, todo);
         return response.data;
     } catch (error: any) {
-        return { errorMessage: error.response?.detail || `Failed to save todo. Please try again.`, errorCode: error.status };
+        return { errorMessage: error.response?.data?.detail || `Failed to save todo. Please try again.`, errorCode: error.status };
     }
 }
 
@@ -33,7 +33,7 @@ export const fetchTodoById = async (id: any) => {
         const response = await axios.get(`${getApiUrl()}/${id}`);
         return response.data;
     } catch (error: any) {
-        return { errorMessage: error.response?.detail || `Todo with [${id}] not found.`, errorCode: error.status };
+        return { errorMessage: error.response?.data?.detail || `Todo with [${id}] not found.`, errorCode: error.status };
     }
 };
 
@@ -42,15 +42,14 @@ export const updateTodo = async (id: any, todo: any) => {
         const response = await axios.put(`${getApiUrl()}/${id}`, todo);
         return response.data;
     } catch (error: any) {
-        return { errorMessage: error.response?.detail || `Failed to update todo. Please try again.`, errorCode: error.status };
+        return { errorMessage: error.response?.data?.detail || `Failed to update todo. Please try again.`, errorCode: error.status };
     }
 };
 
 export const deleteTodo = async (id: any) => {
     try {
-        const response = await axios.delete(`${getApiUrl()}/${id}`);
-        return response?.data;
+        await axios.delete(`${getApiUrl()}/${id}`);
     } catch (error: any) {
-        return { errorMessage: error.response?.detail || `Failed to delete todo. Please try again.`, errorCode: error.status };
+        return { errorMessage: error.response?.data?.detail || `Failed to delete todo. Please try again.`, errorCode: error.status };
     }
 };

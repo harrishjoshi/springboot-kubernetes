@@ -1,5 +1,6 @@
 import { saveTodo } from "@/services/api";
 import Link from "next/link";
+import router from "next/router";
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,15 +28,17 @@ export default function AddTodo() {
 
         const payload = { title, description };
         const response = await saveTodo(payload);
-        if (!response?.errorMessage) {
+        if (response?.errorMessage) {
             toast.error(response.errorMessage);
             return;
         }
 
-        console.log("Add todo Response: ", response)
         setTitle("");
         setDescription("");
         toast.success("Todo saved successfully.");
+        setTimeout(() => {
+            router.push("/todos");
+        }, 1500);
     };
 
     return (
@@ -86,7 +89,6 @@ export default function AddTodo() {
                     <div className="col-2"></div> {/* Right padding */}
                 </div>
             </div>
-
         </div>
     );
 }
