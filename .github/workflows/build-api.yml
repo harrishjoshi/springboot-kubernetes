@@ -2,7 +2,16 @@ name: Build TODO API
 
 on:
   push:
-    branches: [ "**" ]
+    paths:
+      - "todo-api/**"
+    branches: [ "main" ]
+  pull_request:
+    paths:
+      - "todo-api/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   build-todo-api:

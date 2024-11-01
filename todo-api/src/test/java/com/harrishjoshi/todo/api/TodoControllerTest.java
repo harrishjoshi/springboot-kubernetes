@@ -64,7 +64,7 @@ class TodoControllerTest {
             "1, 12, 2, 1, true, false, true, false",
             "2, 12, 2, 2, false, true, false, true"
     })
-    void shouldGetBookmarks(
+    void shouldGetTodos(
             int pageNumber, int totalElements, int totalPages, int currentPage,
             boolean isFirst, boolean isLast, boolean hasNext, boolean hasPrevious
     ) throws Exception {
