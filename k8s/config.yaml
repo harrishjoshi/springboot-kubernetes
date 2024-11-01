@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-configmap
+  namespace: springboot-kubernetes
+data:
+  postgres_host: "postgres-svc"
+  postgres_port: "5432"
+  postgres_dbname: "todo"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: todo-secret
+  namespace: springboot-kubernetes
+type: Opaque
+data:
+  postgres_username: cG9zdGdyZXM=
+  postgres_password: cGFzc3dvcmQ=
