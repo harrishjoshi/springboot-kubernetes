@@ -14,9 +14,23 @@ export const fetchTodos = async (page: number, query: string): Promise<TodosResp
         url += `&query=${query}`;
     }
 
-    const response = await axios.get<TodosResponse>(url);
+    try {
+        const response = await axios.get<TodosResponse>(url);
 
-    return response.data;
+        return response.data;
+    } catch (error: any) {
+          // Returning an empty TodosResponse
+        return Promise.resolve({
+            data: [],
+            currentPage: 1,
+            totalPages: 1,
+            hasNext: false,
+            hasPrevious: false,
+            totalElements: 0,
+            isFirst: true,
+            isLast: true
+        });
+    }
 }
 
 export const saveTodo = async (todo: { title: string, description: string }) => {
