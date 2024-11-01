@@ -27,6 +27,7 @@ RUN adduser -S nextjs -u 1001
 
 # Copy built files and configuration from the builder stage
 COPY --from=builder /todo-ui/next.config.ts ./
+COPY --from=builder /todo-ui/public ./public
 COPY --from=builder --chown=nextjs:nodejs /todo-ui/.next ./.next
 COPY --from=builder /todo-ui/node_modules ./node_modules
 COPY --from=builder /todo-ui/package.json ./package.json
