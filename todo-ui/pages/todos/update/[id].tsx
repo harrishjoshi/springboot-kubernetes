@@ -43,7 +43,7 @@ const UpdateTodo: React.FC<UpdateTodoProps> = ({ todo }) => {
         toast.success("Todo updated successfully.");
         setTimeout(() => {
             router.push("/todos");
-        }, 1500);  
+        }, 1500);
     };
 
     return (

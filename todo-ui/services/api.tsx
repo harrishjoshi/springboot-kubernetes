@@ -1,6 +1,6 @@
 import axios from "axios"
 import getConfig from 'next/config'
-import { Todo, TodosResponse } from "./models";
+import { TodosResponse } from "./models";
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig()
 
 const getApiUrl = () => {
