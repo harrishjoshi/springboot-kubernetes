@@ -24,20 +24,20 @@ kubectl create namespace springboot-kubernetes
 
 echo "\n-----------------------------------------------------\n"
 
-echo "Enabling NGINX Ingress addon in Minikube..."
+echo "Enabling NGINX Ingress addon in Minikube (default namespace)..."
 
-# Enable the built-in NGINX Ingress controller in Minikube to handle Ingress resources
+# Enable the built-in NGINX Ingress controller in the default namespace (ingress-nginx)
 minikube addons enable ingress
 
 echo "\n-----------------------------------------------------\n"
 
-echo "Waiting for NGINX Ingress controller to be ready in 'springboot-kubernetes' namespace..."
+echo "Waiting for NGINX Ingress controller to be ready in 'ingress-nginx' namespace..."
 
-# Wait until the NGINX Ingress controller pods are fully ready within the 'springboot-kubernetes' namespace
+# Wait until the NGINX Ingress controller pods are fully ready within the 'ingress-nginx' namespace
 # This ensures Ingress services are prepared to manage traffic routing
-kubectl wait --namespace springboot-kubernetes \
+kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
-  --selector=app.kubernetes.io/name=ingress-nginx \
+  --selector=app.kubernetes.io/name=controller \
   --timeout=180s
 
 echo "\n"
