@@ -19,7 +19,8 @@ export const fetchTodos = async (page: number, query: string): Promise<TodosResp
 
         return response.data;
     } catch (error: any) {
-          // Returning an empty TodosResponse
+        console.error("Error while fetching todos:", error);
+
         return Promise.resolve({
             data: [],
             currentPage: 1,
@@ -38,6 +39,7 @@ export const saveTodo = async (todo: { title: string, description: string }) => 
         const response = await axios.post(`${getApiUrl()}`, todo);
         return response.data;
     } catch (error: any) {
+        console.error("Error while saving todo:", error);
         return { errorMessage: error.response?.data?.detail || `Failed to save todo. Please try again.`, errorCode: error.status };
     }
 }
@@ -47,7 +49,8 @@ export const fetchTodoById = async (id: any) => {
         const response = await axios.get(`${getApiUrl()}/${id}`);
         return response.data;
     } catch (error: any) {
-        return { errorMessage: error.response?.data?.detail || `Todo with [${id}] not found.`, errorCode: error.status };
+        console.error(`Error while fetching todo with id [${id}]:`, error);
+        return { errorMessage: error.response?.data?.detail || `Failed to fetch todo with id [${id}].`, errorCode: error.status };
     }
 };
 
@@ -56,6 +59,7 @@ export const updateTodo = async (id: any, todo: any) => {
         const response = await axios.put(`${getApiUrl()}/${id}`, todo);
         return response.data;
     } catch (error: any) {
+        console.error(`Error while updating todo with id [${id}]:`, error);
         return { errorMessage: error.response?.data?.detail || `Failed to update todo. Please try again.`, errorCode: error.status };
     }
 };
@@ -64,6 +68,7 @@ export const deleteTodo = async (id: any) => {
     try {
         await axios.delete(`${getApiUrl()}/${id}`);
     } catch (error: any) {
+        console.error(`Error while deleting todo with id [${id}]:`, error);
         return { errorMessage: error.response?.data?.detail || `Failed to delete todo. Please try again.`, errorCode: error.status };
     }
 };
