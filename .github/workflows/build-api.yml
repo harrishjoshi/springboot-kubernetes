@@ -1,4 +1,4 @@
-name: Build TODO API Docker Image
+name: Build TODO API
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-todo-api:
-    name: Build TODO API
+    name: Build todo-api
     runs-on: ubuntu-latest
     defaults:
       run:
