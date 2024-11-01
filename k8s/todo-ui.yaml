@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-ui-svc
+  namespace: springboot-kubernetes
+spec:
+  type: NodePort
+  selector:
+    app: todo-ui-pod
+  ports:
+    - name: app-port-mapping
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-ui-deployment
+  namespace: springboot-kubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-ui-pod
+  template:
+    metadata:
+      labels:
+        app: todo-ui-pod
+    spec:
+      containers:
+        - name: todo-ui
+          image: harrishjoshi/todo-ui
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CLIENT_SIDE_API_BASE_URL
+              value: http://localhost:18080
+            - name: SERVER_SIDE_API_BASE_URL
+              value: http://todo-api-svc:8080
