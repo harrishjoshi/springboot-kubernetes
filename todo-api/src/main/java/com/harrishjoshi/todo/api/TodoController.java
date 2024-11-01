@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/todo")
-@CrossOrigin
 public class TodoController {
 
     private final TodoService todoService;
