@@ -41,5 +41,5 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = LockOptions.SKIP_LOCKED + "")})
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<Todo> findTop10ByStatusOrderByCreatedAtDesc(TodoStatus status);
+    List<Todo> findTop50ByStatusOrderByCreatedAtDesc(TodoStatus status);
 }

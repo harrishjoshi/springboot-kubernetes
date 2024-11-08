@@ -9,24 +9,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
-public class SampleJob {
+public class TodoJob {
 
-    private static final Logger log = LoggerFactory.getLogger(SampleJob.class);
+    private static final Logger log = LoggerFactory.getLogger(TodoJob.class);
     private final TransactionTemplate transactionTemplate;
     private final TodoRepository todoRepository;
 
-    public SampleJob(TransactionTemplate transactionTemplate, TodoRepository todoRepository) {
+    public TodoJob(TransactionTemplate transactionTemplate, TodoRepository todoRepository) {
         this.transactionTemplate = transactionTemplate;
         this.todoRepository = todoRepository;
     }
 
     @Scheduled(cron = "0 */5 * * * *")
     void execute() {
-        System.out.println("Sample Job started...");
+        log.info("Todo Job started...");
         var pending = true;
         while (pending) {
             pending = Boolean.TRUE.equals(transactionTemplate.execute(txnStatus -> {
-                var todos = todoRepository.findTop10ByStatusOrderByCreatedAtDesc(TodoStatus.PENDING);
+                var todos = todoRepository.findTop50ByStatusOrderByCreatedAtDesc(TodoStatus.PENDING);
                 if (todos.isEmpty()) {
                     return false;
                 }
@@ -40,6 +40,6 @@ public class SampleJob {
             }));
         }
 
-        log.info("Sample Job completed...");
+        log.info("Todo Job completed...");
     }
 }
