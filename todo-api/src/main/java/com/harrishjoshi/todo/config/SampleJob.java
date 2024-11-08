@@ -1,6 +1,5 @@
 package com.harrishjoshi.todo.config;
 
-import com.harrishjoshi.todo.domain.Todo;
 import com.harrishjoshi.todo.domain.TodoRepository;
 import com.harrishjoshi.todo.domain.TodoStatus;
 import org.slf4j.Logger;
@@ -8,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import java.util.List;
 
 @Component
 public class SampleJob {
@@ -26,11 +23,19 @@ public class SampleJob {
     @Scheduled(cron = "0 */5 * * * *")
     void execute() {
         System.out.println("Sample Job started...");
-        transactionTemplate.execute(status -> {
-            List<Todo> todos = todoRepository.findTop10ByStatusOrderByCreatedAtDesc(TodoStatus.PENDING);
-            todos.forEach(todo -> log.info("Processing todo: {}", todo.getTitle()));
-            return null;
-        });
+        var pending = true;
+        while (pending) {
+            pending = Boolean.TRUE.equals(transactionTemplate.execute(txnStatus -> {
+                var todos = todoRepository.findTop10ByStatusOrderByCreatedAtDesc(TodoStatus.PENDING);
+                if (todos.isEmpty()) {
+                    return false;
+                }
+
+                todos.forEach(todo -> log.info("Processing todo: {}", todo.getTitle()));
+                return true;
+            }));
+        }
+
         log.info("Sample Job completed...");
     }
 }
