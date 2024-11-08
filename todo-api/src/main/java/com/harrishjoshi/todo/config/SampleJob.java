@@ -31,7 +31,11 @@ public class SampleJob {
                     return false;
                 }
 
-                todos.forEach(todo -> log.info("Processing todo: {}", todo.getTitle()));
+                todos.forEach(todo -> {
+                    log.info("Processing todo: {}", todo.getTitle());
+                    todo.setStatus(TodoStatus.IN_PROGRESS);
+                    todoRepository.save(todo);
+                });
                 return true;
             }));
         }
