@@ -1,9 +1,16 @@
 package com.harrishjoshi.todo.domain;
 
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.QueryHint;
+import org.hibernate.LockOptions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
+
+import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
@@ -30,4 +37,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             WHERE UPPER(t.title) = UPPER(:title) AND (:id IS NULL OR t.id != :id)
             """)
     boolean existsByTitleIgnoreCaseAndIdIsNot(String title, Long id);
+
+    @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = LockOptions.NO_WAIT + ""))
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Todo> findTop10ByStatusOrderByCreatedAtDesc(TodoStatus status);
 }
